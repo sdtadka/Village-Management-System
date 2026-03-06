@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="hi" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+
+  <title>Village Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1b5e20;
+      --primary-light: #2e7d32;
+      --primary-dark: #0d3311;
+      --accent: #4caf50;
+      --gold: #c9a84c;
+      --white: #ffffff;
+      --light: #f1f8e9;
+      --gray: #e8e8e8;
+      --text: #1a1a1a;
+      --text-light: #555;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', 'Noto Sans Arabic', sans-serif;
+      background: var(--light);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light));
+      color: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mosque-icon {
+      width: 42px;
+      height: 42px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .header-title h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .header-title p {
+      font-size: 10px;
+      opacity: 0.8;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-btn:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-1px);
+    }
+
+    /* ISLAMIC BANNER */
+    .islamic-banner {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      text-align: center;
+      padding: 20px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .islamic-banner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><path d='M40 0 L80 40 L40 80 L0 40Z' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='1'/></svg>") repeat;
+    }
+
+    .islamic-banner .bismillah {
+      font-size: 26px;
+      font-family: 'Noto Sans Arabic', serif;
+      margin-bottom: 6px;
+      position: relative;
+      font-weight: 700;
+    }
+
+    .islamic-banner .subtitle {
+      font-size: 11px;
+      opacity: 0.85;
+      position: relative;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* NAVIGATION TABS */
+    .nav-tabs {
+      background: white;
+      display: flex;
+      overflow-x: auto;
+      border-bottom: 2px solid var(--gray);
+      position: sticky;
+      top: 66px;
+      z-index: 999;
+    }
+
+    .nav-tabs::-webkit-scrollbar { display: none; }
+
+    .nav-tab {
+      flex: 1;
+      min-width: fit-content;
+      padding: 12px 16px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-light);
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      font-family: inherit;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+
+    .nav-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-tab i {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .page { display: none; animation: fadeUp 0.4s ease; }
+    .page.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SECTION HEADING */
+    .section-heading {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 28px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(27,94,32,0.15);
+    }
+
+    .section-heading i {
+      font-size: 20px;
+    }
+
+    /* CARDS */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .info-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .info-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .info-card .card-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card .card-header::after {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .info-card .card-header i {
+      font-size: 28px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .info-card .card-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .info-card .card-body {
+      padding: 16px;
+    }
+
+    .info-card .card-body p {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    .info-card .card-footer {
+      padding: 12px 16px;
+      border-top: 1px solid var(--gray);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* PROFILE CARDS */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .profile-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+
+    .profile-card .profile-banner {
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      position: relative;
+    }
+
+    .profile-card .profile-banner.imam-banner {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    }
+
+    .profile-card .profile-banner.secretary-banner {
+      background: linear-gradient(135deg, #1565c0, #42a5f5);
+    }
+
+    .profile-card .profile-banner.security-banner {
+      background: linear-gradient(135deg, #37474f, #607d8b);
+    }
+
+    .profile-card .profile-banner.member-banner {
+      background: linear-gradient(135deg, #4e342e, #795548);
+    }
+
+    .profile-card .profile-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid white;
+      object-fit: cover;
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gray);
+    }
+
+    .profile-card .profile-photo-placeholder {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid white;
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: var(--primary);
+    }
+
+    .profile-card .profile-info {
+      padding: 50px 16px 20px;
+    }
+
+    .profile-card .profile-role {
+      display: inline-block;
+      padding: 3px 14px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .profile-role.role-imam {
+      background: #e8f5e9;
+      color: var(--primary);
+    }
+
+    .profile-role.role-secretary {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .profile-role.role-security {
+      background: #eceff1;
+      color: #37474f;
+    }
+
+    .profile-role.role-member {
+      background: #efebe9;
+      color: #4e342e;
+    }
+
+    .profile-card h3 { font-size: 16px; font-weight: 600; color: var(--text); }
+    .profile-card .profile-qual { font-size: 12px; color: var(--text-light); margin-top: 2px; font-style: italic; }
+    .profile-card .profile-address { font-size: 11px; color: #888; margin-top: 4px; }
+    .profile-card .profile-since { font-size: 10px; color: #aaa; margin-top: 4px; }
+
+    .profile-card .call-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-size: 13px;
+      margin-top: 12px;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .profile-card .call-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+    .profile-card .call-btn.secretary-call { background: #1565c0; }
+    .profile-card .call-btn.secretary-call:hover { background: #0d47a1; }
+
+    .profile-card .call-btn.security-call { background: #37474f; }
+    .profile-card .call-btn.security-call:hover { background: #263238; }
+
+    .profile-card .call-btn.member-call { background: #4e342e; }
+    .profile-card .call-btn.member-call:hover { background: #3e2723; }
+
+    /* SEARCH BAR - मोबाइल फ्रेंडली अपडेट */
+    .search-container {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .search-container input {
+      flex: 1;
+      min-width: 0; /* महत्वपूर्ण: flex को सही से काम करने देता है */
+      border: 2px solid var(--gray);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s;
+      width: 100%;
+    }
+
+    .search-container input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-container button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 22px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      box-shadow: 0 4px 10px rgba(27,94,32,0.2);
+    }
+
+    .search-container button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .search-container button i {
+      font-size: 16px;
+    }
+
+    /* मोबाइल के लिए स्पेशल स्टाइल */
+    @media (max-width: 600px) {
+      .search-container {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+      }
+      
+      .search-container input {
+        width: 100%;
+        padding: 16px 18px;
+        font-size: 16px;
+        border-radius: 12px;
+      }
+      
+      .search-container button {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 20px;
+        font-size: 16px;
+        border-radius: 12px;
+      }
+      
+      .search-container button i {
+        font-size: 18px;
+      }
+    }
+
+    /* छोटी मोबाइल स्क्रीन के लिए */
+    @media (max-width: 380px) {
+      .search-container {
+        padding: 12px;
+      }
+      
+      .search-container input {
+        padding: 14px 16px;
+        font-size: 15px;
+      }
+      
+      .search-container button {
+        padding: 14px 16px;
+        font-size: 15px;
+      }
+    }
+
+    /* VILLAGER LIST */
+    .villager-list {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .villager-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--gray);
+      transition: background 0.2s;
+    }
+
+    .villager-item:hover { background: var(--light); }
+    .villager-item:last-child { border-bottom: none; }
+
+    .villager-info { flex: 1; }
+
+    .villager-info .v-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .villager-info .v-father {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .villager-info .v-mobile {
+      font-size: 11px;
+      color: var(--primary);
+      margin-top: 2px;
+    }
+
+    .villager-info .v-id {
+      font-size: 10px;
+      color: #999;
+      background: var(--gray);
+      padding: 2px 8px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .villager-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .v-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      font-weight: 500;
+    }
+
+    .v-btn.family {
+      background: var(--light);
+      color: var(--primary);
+      border: 1px solid var(--accent);
+    }
+
+    .v-btn.family:hover { background: var(--primary); color: white; }
+
+    /* टेबल फॉर्मेट */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    th {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: var(--white);
+      padding: 15px 14px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    td {
+      padding: 13px 14px;
+      border-bottom: 1px solid #f0f2f5;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    tr:hover td {
+      background: #fffde7;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .status-active {
+      background: #d5f5e3;
+      color: var(--primary);
+    }
+
+    .status-inactive {
+      background: #fadbd8;
+      color: #e74c3c;
+    }
+
+    .mobile-masked {
+      font-family: monospace;
+      color: var(--text-light);
+    }
+
+    /* MODAL / POPUP */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.show { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .modal-header h2 { font-size: 16px; font-weight: 600; }
+
+    .modal-close {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,0.35); }
+
+    .modal-body { padding: 20px; }
+
+    /* DETAIL PAGE */
+    .detail-section { margin-bottom: 20px; }
+    .detail-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--light);
+    }
+    .detail-section p {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    .detail-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .detail-info-item {
+      background: var(--light);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .detail-info-item label {
+      font-size: 10px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-info-item span {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 2px;
+    }
+
+    /* GALLERY */
+    .gallery-section {
+      margin-top: 14px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .gallery-grid img:hover { 
+      transform: scale(1.03); 
+      border-color: var(--primary);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    /* FULL IMAGE VIEWER */
+    .image-viewer {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      padding: 20px;
+    }
+
+    .image-viewer.show { display: flex; }
+
+    .image-viewer img {
+      max-width: 95%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 8px;
+      animation: zoomIn 0.3s ease;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .image-viewer .close-viewer {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .image-viewer .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .image-viewer .nav-arrow:hover { background: rgba(255,255,255,0.3); }
+    .image-viewer .nav-arrow.prev { left: 16px; }
+    .image-viewer .nav-arrow.next { right: 16px; }
+
+    /* LIKE BUTTON */
+    .like-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .like-btn {
+      background: var(--light);
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      padding: 8px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .like-btn:hover, .like-btn.liked {
+      background: var(--primary);
+      color: white;
+    }
+
+    .like-count {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    /* MAP */
+    .map-container {
+      margin-top: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid var(--gray);
+    }
+
+    .map-container iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+    }
+
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-size: 13px;
+      text-decoration: none;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    .map-link:hover { text-decoration: underline; }
+
+    /* NAMAZ TIMES */
+    .namaz-times-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .namaz-time-card {
+      background: var(--light);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid rgba(46,125,50,0.1);
+    }
+
+    .namaz-time-card .namaz-name {
+      font-size: 11px;
+      color: var(--text-light);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .namaz-time-card .namaz-time {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    /* RAMADAN TABLE */
+    .ramadan-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+
+    .ramadan-table th {
+      background: var(--primary);
+      color: white;
+      padding: 10px 8px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    .ramadan-table td {
+      padding: 8px;
+      text-align: center;
+      border-bottom: 1px solid var(--gray);
+    }
+
+    .ramadan-table tr:hover td { background: var(--light); }
+
+    /* LOGIN */
+    .login-form { max-width: 350px; margin: 0 auto; }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-light);
+      margin-bottom: 6px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid var(--gray);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus { border-color: var(--primary); }
+
+    .btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover { background: var(--primary); color: white; }
+
+    .login-type-btns {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .login-type-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid var(--gray);
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      text-align: center;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .login-type-btn.active, .login-type-btn:hover {
+      border-color: var(--primary);
+      background: var(--light);
+      color: var(--primary);
+    }
+
+    .login-type-btn i {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    /* NOTIFICATIONS */
+    .notif-bar {
+      background: white;
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--gold);
+    }
+
+    .notif-bar .notif-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .notif-bar .notif-msg {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .notif-bar .notif-date {
+      font-size: 10px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    /* LOADING & EMPTY */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+
+    .loading .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--gray);
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-light);
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      color: var(--gray);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--primary);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      z-index: 99999;
+      transition: transform 0.4s ease;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* FOOTER */
+    .footer {
+      background: var(--primary-dark);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 16px;
+      font-size: 11px;
+      margin-top: 40px;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--light); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .header-title h1 { font-size: 14px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .profile-grid { grid-template-columns: 1fr; }
+      .detail-info-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .namaz-times-grid { grid-template-columns: repeat(2, 1fr); }
+      .table-wrap { overflow-x: auto; }
+    }
+
+    /* DASHBOARD CARDS */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .dash-card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .dash-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .dash-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .dash-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      font-size: 24px;
+    }
+
+    .dash-count {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .dash-card-bottom h3 {
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .dash-card-bottom p {
+      color: var(--text-light);
+      font-size: 13px;
+    }
+
+    /* PRAYER TIMES */
+    .prayer-section {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: var(--radius);
+      padding: 20px;
+      margin: 25px 0;
+      color: white;
+    }
+
+    .prayer-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .prayer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .prayer-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 15px 10px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .prayer-emoji {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .prayer-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .prayer-time-main {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+
+    /* LIVE CLOCK */
+    .live-clock-section {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .clock-card {
+      background: white;
+      border-radius: 16px;
+      padding: 15px 25px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .clock-label {
+      color: var(--text-light);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .clock-time {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 5px 0;
+    }
+
+    .clock-date {
+      color: var(--text-light);
+      font-size: 13px;
+    }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .page-btn {
+      padding: 8px 16px;
+      border: 2px solid var(--gray);
+      border-radius: 8px;
+      background: white;
+      color: var(--text);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .page-btn:hover, .page-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-info {
+      color: var(--text-light);
+      font-size: 13px;
+      padding: 0 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="mosque-icon">
+          <i class="fas fa-mosque"></i>
+        </div>
+        <div class="header-title">
+          <h1>Village Management Sistam</h1>
+          </H1> Village SIMRA</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="header-btn" onclick="openLoginModal()">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ISLAMIC BANNER -->
+  <div class="islamic-banner">
+    <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+    <div class="subtitle">In the name of Allah, the Most Gracious, the Most Merciful</div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('home')">
+      <i class="fas fa-home"></i> Home
+    </button>
+    <button class="nav-tab" onclick="showPage('villagers')">
+      <i class="fas fa-users"></i> Villagers
+    </button>
+    <button class="nav-tab" onclick="showPage('team')">
+      <i class="fas fa-user-tie"></i> Team
+    </button>
+    <button class="nav-tab" onclick="showPage('notices')">
+      <i class="fas fa-bell"></i> Notices
+    </button>
+    <button class="nav-tab" onclick="showPage('masjid')">
+      <i class="fas fa-mosque"></i> Masjid
+    </button>
+    <button class="nav-tab" onclick="showPage('gallery')">
+      <i class="fas fa-images"></i> Gallery
+    </button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- ==================== HOME PAGE ==================== -->
+    <div id="page-home" class="page active">
+
+      <!-- Live Clock -->
+      <div class="live-clock-section">
+        <div class="clock-card">
+          <div class="clock-label">Current Time</div>
+          <div class="clock-time" id="liveClock">--:--:--</div>
+          <div class="clock-date" id="liveDate">Loading...</div>
+        </div>
+        <div class="clock-card">
+          <div class="clock-label">Last Updated</div>
+          <div class="clock-time" id="serverTime" style="font-size: 18px;">--</div>
+          <div class="clock-date" id="lastUpdate">Just now</div>
+        </div>
+      </div>
+
+      <!-- Dashboard Cards -->
+      <div class="dashboard-grid">
+        <div class="dash-card" onclick="showPage('villagers')">
+          <div class="dash-card-top">
+            <div class="dash-icon"><i class="fas fa-users"></i></div>
+            <span class="dash-count" id="count-villagers">0</span>
+          </div>
+          <div class="dash-card-bottom">
+            <h3>Total Villagers</h3>
+            <p>Registered residents</p>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showPage('team')">
+          <div class="dash-card-top">
+            <div class="dash-icon"><i class="fas fa-user-tie"></i></div>
+            <span class="dash-count" id="count-team">0</span>
+          </div>
+          <div class="dash-card-bottom">
+            <h3>Team Members</h3>
+            <p>Imam, President & Secretary</p>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showPage('notices')">
+          <div class="dash-card-top">
+            <div class="dash-icon"><i class="fas fa-bell"></i></div>
+            <span class="dash-count" id="count-notices">0</span>
+          </div>
+          <div class="dash-card-bottom">
+            <h3>Notices & Updates</h3>
+            <p>Latest announcements</p>
+          </div>
+        </div>
+
+        <div class="dash-card" onclick="showRamadanCalendar()">
+          <div class="dash-card-top">
+            <div class="dash-icon"><i class="fas fa-moon"></i></div>
+            <span class="dash-count" id="count-ramzan">30</span>
+          </div>
+          <div class="dash-card-bottom">
+            <h3>Ramzan Schedule</h3>
+            <p>Sehri & Iftar Timings</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prayer Times -->
+      <div class="prayer-section">
+        <div class="prayer-header">
+          <h2>
+            <i class="fas fa-clock"></i> Prayer Times (Namaz Ka Waqt)
+          </h2>
+        </div>
+        <div class="prayer-grid" id="prayerGrid">
+          <div class="loading">
+            <div class="spinner"></div>
+            <span>Loading prayer times...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div id="notifications-area"></div>
+
+      <!-- ========== IMAM PROFILE ON HOME ========== -->
+      <h2 class="section-heading">
+        <i class="fas fa-user-tie"></i> Imam
+      </h2>
+      <div class="profile-grid" id="imam-profiles-area">
+        <div class="loading"><div class="spinner"></div>Loading...</div>
+      </div>
+
+      <!-- ========== SADR / SECRETARY PROFILES ON HOME ========== -->
+      <h2 class="section-heading">
+        <i class="fas fa-id-badge"></i> Sadr / Secretary
+      </h2>
+      <div class="profile-grid" id="secretary-profiles-area">
+        <div class="loading"><div class="spinner"></div>Loading...</div>
+      </div>
+
+      <!-- ========== SECURITY PROFILES ON HOME ========== -->
+      <h2 class="section-heading">
+        <i class="fas fa-shield-alt"></i> Security
+      </h2>
+      <div class="profile-grid" id="security-profiles-area">
+        <div class="loading"><div class="spinner"></div>Loading...</div>
+      </div>
+
+      <!-- ========== MEMBERS PROFILES ON HOME ========== -->
+      <h2 class="section-heading">
+        <i class="fas fa-users"></i> Members
+      </h2>
+      <div class="profile-grid" id="member-profiles-area">
+        <div class="loading"><div class="spinner"></div>Loading...</div>
+      </div>
+
+      <!-- Ramzan Calendar (Hidden by default) -->
+      <div id="ramzanCalendar" style="display: none; margin-top: 20px;">
+        <div class="detail-section">
+          <h3><i class="fas fa-calendar-alt"></i> Ramzan Ul Mubarak 1446</h3>
+          <p>Sehri & Iftar Timings - Village Simra</p>
+          <button class="btn btn-outline" onclick="hideRamadanCalendar()" style="margin-bottom: 15px;">Close Calendar</button>
+          <div id="ramzanGrid"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== VILLAGERS PAGE (CORRECTED) ==================== -->
+    <div id="page-villagers" class="page">
+      <h2 class="section-heading">
+        <i class="fas fa-users"></i> Villagers Directory
+      </h2>
+      <p style="margin-bottom: 15px; color: var(--text-light);">All registered residents of Village Simra</p>
+
+      <!-- SEARCH BAR - मोबाइल फ्रेंडली अपडेट (क्लोज बटन हटाया गया) -->
+      <div class="search-container">
+        <input type="text" id="public-search" placeholder="Search by Name & ID..." oninput="debounceSearch()">
+        <button onclick="searchVillagers()">
+          <i class="fas fa-search"></i> खोजें
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div id="villagers-loading" class="loading">
+        <div class="spinner"></div>
+        <span>Loading villagers data...</span>
+      </div>
+
+      <!-- Error State -->
+      <div id="villagers-error" class="empty-state" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p id="villagers-error-msg">Something went wrong</p>
+        <button class="btn btn-primary" onclick="refreshAllData()" style="margin-top: 15px;">Try Again</button>
+      </div>
+
+      <!-- Villagers Table (Corrected Headers) -->
+      <div id="villagers-table-wrap" class="table-wrap" style="display: none;">
+        <table>
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Villager ID</th>
+              <th>Full Name</th>
+              <th>Father's Name</th>
+              <th>Mobile</th>
+              <th>Status</th>
+              <th>Family</th>
+            </tr>
+          </thead>
+          <tbody id="villagers-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div id="villagers-pagination" class="pagination" style="display: none;"></div>
+    </div>
+
+    <!-- ==================== TEAM PAGE ==================== -->
+    <div id="page-team" class="page">
+      <h2 class="section-heading">
+        <i class="fas fa-user-tie"></i> Team Members
+      </h2>
+      <p style="margin-bottom: 15px; color: var(--text-light);">Imam, President, Secretary & Committee Members</p>
+
+      <div id="team-loading" class="loading">
+        <div class="spinner"></div>
+        <span>Loading team...</span>
+      </div>
+
+      <div id="team-error" class="empty-state" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p id="team-error-msg">Something went wrong</p>
+        <button class="btn btn-primary" onclick="refreshAllData()" style="margin-top: 15px;">Try Again</button>
+      </div>
+
+      <div class="profile-grid" id="team-grid" style="display: none;"></div>
+    </div>
+
+    <!-- ==================== NOTICES PAGE ==================== -->
+    <div id="page-notices" class="page">
+      <h2 class="section-heading">
+        <i class="fas fa-bell"></i> Notices & Updates
+      </h2>
+      <p style="margin-bottom: 15px; color: var(--text-light);">Eidgah, Kabristan, Masjid, Ramzan & More</p>
+
+      <!-- Notice Filters -->
+      <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;" id="notice-filters">
+        <button class="filter-btn active" onclick="filterNotices('all', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: var(--primary); color: white; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">All</button>
+        <button class="filter-btn" onclick="filterNotices('Eidgah', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">Eidgah</button>
+        <button class="filter-btn" onclick="filterNotices('Kabristan', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">Kabristan</button>
+        <button class="filter-btn" onclick="filterNotices('Masjid', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">Masjid</button>
+        <button class="filter-btn" onclick="filterNotices('Ramzan', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">Ramzan</button>
+        <button class="filter-btn" onclick="filterNotices('General', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">General</button>
+      </div>
+
+      <div id="notices-loading" class="loading">
+        <div class="spinner"></div>
+        <span>Loading notices...</span>
+      </div>
+
+      <div id="notices-error" class="empty-state" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p id="notices-error-msg">Something went wrong</p>
+        <button class="btn btn-primary" onclick="refreshAllData()" style="margin-top: 15px;">Try Again</button>
+      </div>
+
+      <div class="notice-grid" id="notice-grid" style="display: none;"></div>
+    </div>
+
+    <!-- ==================== MASJID PAGE ==================== -->
+    <div id="page-masjid" class="page">
+      <div id="masjid-content">
+        <div class="loading"><div class="spinner"></div>Loading masjid information...</div>
+      </div>
+    </div>
+
+    <!-- ==================== GALLERY PAGE ==================== -->
+    <div id="page-gallery" class="page">
+      <h2 class="section-heading"><i class="fas fa-images"></i> Photo Gallery</h2>
+      
+      <!-- Gallery Filter Tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <button class="gallery-filter-btn active" onclick="filterGallery('all',this)" style="padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:var(--primary);color:white;cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all 0.3s;">All</button>
+        <button class="gallery-filter-btn" onclick="filterGallery('masjid',this)" style="padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:white;color:var(--primary);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all 0.3s;">Masjid</button>
+        <button class="gallery-filter-btn" onclick="filterGallery('kabristan',this)" style="padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:white;color:var(--primary);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all 0.3s;">Kabristan</button>
+        <button class="gallery-filter-btn" onclick="filterGallery('eidgah',this)" style="padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:white;color:var(--primary);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all 0.3s;">Eidgah</button>
+      </div>
+
+      <div id="gallery-content">
+        <div class="loading"><div class="spinner"></div>Loading gallery...</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== LOGIN MODAL ==================== -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal" style="max-width:420px;">
+      <div class="modal-header">
+        <h2><i class="fas fa-lock"></i> Secure Login</h2>
+        <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="login-form">
+          <div class="login-type-btns">
+            <button class="login-type-btn active" onclick="setLoginType('admin', this)">
+              <i class="fas fa-user-shield"></i> Admin
+            </button>
+            <button class="login-type-btn" onclick="setLoginType('staff', this)">
+              <i class="fas fa-user-tie"></i> Staff
+            </button>
+          </div>
+
+          <div id="login-step-1">
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="login-email" placeholder="Enter registered email">
+            </div>
+            <button class="btn btn-primary" onclick="requestOTP()">
+              <i class="fas fa-paper-plane"></i> Send OTP
+            </button>
+          </div>
+
+          <div id="login-step-2" style="display:none;">
+            <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">
+              OTP has been sent to your email. Please check and enter below.
+            </p>
+            <div class="form-group">
+              <label>Enter OTP</label>
+              <input type="text" id="login-otp" placeholder="Enter 6-digit OTP" maxlength="6" style="text-align:center;letter-spacing:8px;font-size:20px;font-weight:700;">
+            </div>
+            <button class="btn btn-primary" onclick="verifyLoginOTP()">
+              <i class="fas fa-check-circle"></i> Verify & Login
+            </button>
+            <p style="text-align:center;margin-top:12px;">
+              <a href="javascript:void(0)" onclick="requestOTP()" style="color:var(--primary);font-size:12px;">Resend OTP</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PROFILE VIEW MODAL ==================== -->
+  <div class="modal-overlay" id="profileViewModal">
+    <div class="modal" style="max-width:420px;">
+      <div class="modal-header" id="profile-modal-header">
+        <h2>Profile</h2>
+        <button class="modal-close" onclick="closeModal('profileViewModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="profile-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ==================== IMAGE VIEWER ==================== -->
+  <div class="image-viewer" id="imageViewer">
+    <button class="close-viewer" onclick="closeImageViewer()">&times;</button>
+    <button class="nav-arrow prev" onclick="prevImage()"><i class="fas fa-chevron-left"></i></button>
+    <img id="viewer-img" src="" alt="Photo">
+    <button class="nav-arrow next" onclick="nextImage()"><i class="fas fa-chevron-right"></i></button>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+  <p>Village Management Sistam Islamic Portal | Developed by <a href="https://github.com/sdtadka" target="_blank" style="color: white; text-decoration: none; font-weight: 600;">Sadik Husain</a></p>
+  <p style="margin-top:4px;">© 2026 All Rights Reserved</p>
+</div>
+
+  <script>
+    // Google Apps Script URL
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwdqPAbjYEGtKIirXpY70niUED47hJTwZUO1Y3qergdVFkNNrPIEo0TTt_TbRz5YeCr/exec';
+    
+    // Global variables
+    let loginType = 'admin';
+    let loginEmail = '';
+    let allVillagers = [];
+    let allProfiles = [];
+    let allNotices = [];
+    let allPrayers = [];
+    let allRamadan = [];
+    let allGalleryImages = { masjid: [], kabristan: [], eidgah: [] };
+    let currentGalleryImages = [];
+    let currentImageIndex = 0;
+    let currentPage = 'home';
+    let villagerPage = 1;
+    let searchTimer = null;
+    let filteredVillagers = [];
+    let currentNoticeFilter = 'all';
+
+    // ============ INIT ============
+    document.addEventListener('DOMContentLoaded', function() {
+      startClock();
+      fetchAllData();
+      
+      // Close modal on outside click
+      document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) overlay.classList.remove('show');
+        });
+      });
+    });
+
+    // ============ LIVE CLOCK ============
+    function startClock() {
+      function updateClock() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', { 
+          hour: '2-digit', minute: '2-digit', second: '2-digit',
+          hour12: true 
+        });
+        const dateStr = now.toLocaleDateString('en-US', {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+        
+        const el = document.getElementById('liveClock');
+        const dateEl = document.getElementById('liveDate');
+        if (el) el.textContent = timeStr;
+        if (dateEl) dateEl.textContent = dateStr;
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
+
+    // ============ FETCH ALL DATA ============
+    async function fetchAllData() {
+      showLoaders(true);
+      
+      try {
+        const [profilesRes, villagersRes, noticesRes, prayersRes, ramadanRes] = await Promise.all([
+          fetch(`${SCRIPT_URL}?action=getProfiles`),
+          fetch(`${SCRIPT_URL}?action=getVillagers&mode=public`),
+          fetch(`${SCRIPT_URL}?action=getNotices`),
+          fetch(`${SCRIPT_URL}?action=getPrayers`),
+          fetch(`${SCRIPT_URL}?action=getRamadanCalendar`)
+        ]);
+
+        const profilesData = await profilesRes.json();
+        const villagersData = await villagersRes.json();
+        const noticesData = await noticesRes.json();
+        const prayersData = await prayersRes.json();
+        const ramadanData = await ramadanRes.json();
+
+        allProfiles = profilesData.success ? profilesData.data : [];
+        allVillagers = villagersData.success ? villagersData.data : [];
+        allNotices = noticesData.success ? noticesData.data : [];
+        allPrayers = prayersData.success ? prayersData.data : [];
+        allRamadan = ramadanData.success ? ramadanData.data : [];
+
+        renderDashboard();
+        renderPrayers();
+        renderProfiles();
+        renderVillagers();
+        renderNotices();
+
+        showLoaders(false);
+        document.getElementById('serverTime').textContent = new Date().toLocaleTimeString();
+        document.getElementById('lastUpdate').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+        
+        showToast('✅ Data loaded successfully!');
+
+      } catch (error) {
+        console.error('Fetch error:', error);
+        showErrors(error.message);
+        showToast('❌ ' + error.message);
+      }
+    }
+
+    // ============ RENDER DASHBOARD ============
+    function renderDashboard() {
+      document.getElementById('count-villagers').textContent = allVillagers.length;
+      document.getElementById('count-team').textContent = allProfiles.length;
+      document.getElementById('count-notices').textContent = allNotices.length;
+      document.getElementById('count-ramzan').textContent = allRamadan.length || 30;
+    }
+
+    // ============ RENDER PRAYERS ============
+    function renderPrayers() {
+      const grid = document.getElementById('prayerGrid');
+      const prayers = allPrayers;
+
+      if (!prayers || prayers.length === 0) {
+        grid.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.8);padding:20px;">No prayer times available</div>';
+        return;
+      }
+
+      const emojis = {
+        'Fajr': '🌅', 'Zuhr': '☀️', 'Asr': '🌤️',
+        'Maghrib': '🌇', 'Isha': '🌙', 'Jummah': '🕌'
+      };
+
+      let html = '';
+      prayers.forEach(p => {
+        const emoji = emojis[p.Namaz_Name] || '🕌';
+        html += `
+          <div class="prayer-card">
+            <div class="prayer-emoji">${emoji}</div>
+            <div class="prayer-name">${p.Namaz_Name || '-'}</div>
+            <div class="prayer-time-main">${p.Jamaat_Time || '-'}</div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    // ============ RENDER PROFILES ============
+    function renderProfiles() {
+      const imamArea = document.getElementById('imam-profiles-area');
+      const secArea = document.getElementById('secretary-profiles-area');
+      const securityArea = document.getElementById('security-profiles-area');
+      const memberArea = document.getElementById('member-profiles-area');
+      const teamGrid = document.getElementById('team-grid');
+
+      if (!allProfiles || allProfiles.length === 0) {
+        const emptyHtml = '<div class="empty-state"><i class="fas fa-user-slash"></i><p>No profiles added yet</p></div>';
+        imamArea.innerHTML = emptyHtml;
+        secArea.innerHTML = emptyHtml;
+        securityArea.innerHTML = emptyHtml;
+        memberArea.innerHTML = emptyHtml;
+        teamGrid.innerHTML = emptyHtml;
+        teamGrid.style.display = 'block';
+        return;
+      }
+
+      const imams = allProfiles.filter(p => p.role && p.role.toLowerCase() === 'imam');
+      const secretaries = allProfiles.filter(p => p.role && (p.role.toLowerCase().includes('secretary') || p.role.toLowerCase().includes('sadr')));
+      const securities = allProfiles.filter(p => p.role && p.role.toLowerCase() === 'security');
+      const members = allProfiles.filter(p => {
+        const r = (p.role || '').toLowerCase();
+        return r !== 'imam' && !r.includes('secretary') && !r.includes('sadr') && r !== 'security';
+      });
+
+      imamArea.innerHTML = renderProfileCards(imams, 'imam');
+      secArea.innerHTML = renderProfileCards(secretaries, 'secretary');
+      securityArea.innerHTML = renderProfileCards(securities, 'security');
+      memberArea.innerHTML = renderProfileCards(members, 'member');
+      
+      teamGrid.innerHTML = renderProfileCards(allProfiles, 'member');
+      teamGrid.style.display = 'grid';
+    }
+
+    function renderProfileCards(profiles, type) {
+      if (profiles.length === 0) {
+        return '<div class="empty-state" style="padding:20px;"><i class="fas fa-user-slash"></i><p>No ' + type + ' profiles added yet</p></div>';
+      }
+
+      let html = '';
+      profiles.forEach((p, idx) => {
+        const bannerClass = type + '-banner';
+        const roleClass = 'role-' + type;
+        const callClass = type !== 'imam' ? type + '-call' : '';
+
+        const photoHtml = p.photoURL
+          ? `<img src="${p.photoURL}" class="profile-photo" alt="${p.name}">`
+          : `<div class="profile-photo-placeholder"><i class="fas fa-user"></i></div>`;
+
+        const profileJson = JSON.stringify(p).replace(/'/g, "&#39;");
+
+        html += `
+          <div class="profile-card" onclick='openProfileView(${profileJson}, "${type}")'>
+            <div class="profile-banner ${bannerClass}">
+              ${photoHtml}
+            </div>
+            <div class="profile-info">
+              <span class="profile-role ${roleClass}">${p.role || 'Member'}</span>
+              <h3>${p.name || 'Unknown'}</h3>
+              ${p.qualification ? `<p class="profile-qual">${p.qualification}</p>` : ''}
+              ${p.address ? `<p class="profile-address"><i class="fas fa-map-marker-alt"></i> ${p.address}</p>` : ''}
+              ${p.joinDate ? `<p class="profile-since"><i class="fas fa-calendar-check"></i> Since: ${p.joinDate}</p>` : ''}
+              <a href="tel:${p.mobile}" class="call-btn ${callClass}" onclick="event.stopPropagation();">
+                <i class="fas fa-phone"></i> Call Now
+              </a>
+            </div>
+          </div>
+        `;
+      });
+      return html;
+    }
+
+    // ============ PROFILE VIEW MODAL ============
+    function openProfileView(profile, type) {
+      const colors = {
+        imam: { bg: 'linear-gradient(135deg, #0d3311, #1b5e20)', badge: '#e8f5e9', badgeText: '#1b5e20' },
+        secretary: { bg: 'linear-gradient(135deg, #0d47a1, #1565c0)', badge: '#e3f2fd', badgeText: '#1565c0' },
+        security: { bg: 'linear-gradient(135deg, #263238, #37474f)', badge: '#eceff1', badgeText: '#37474f' },
+        member: { bg: 'linear-gradient(135deg, #3e2723, #4e342e)', badge: '#efebe9', badgeText: '#4e342e' }
+      };
+
+      const c = colors[type] || colors.member;
+
+      document.getElementById('profile-modal-header').style.background = c.bg;
+      document.getElementById('profile-modal-header').querySelector('h2').textContent = (profile.role || 'Member') + ' Profile';
+
+      let html = `
+        <div style="text-align:center;margin-bottom:20px;">
+          ${profile.photoURL 
+            ? `<img src="${profile.photoURL}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid ${c.badgeText};margin-bottom:12px;">`
+            : `<div style="width:100px;height:100px;border-radius:50%;background:${c.badge};display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"><i class="fas fa-user" style="font-size:40px;color:${c.badgeText};"></i></div>`
+          }
+          <span style="display:inline-block;background:${c.badge};color:${c.badgeText};padding:4px 16px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">${profile.role || 'Member'}</span>
+          <h3 style="font-size:20px;margin-top:8px;">${profile.name || 'Unknown'}</h3>
+        </div>
+      `;
+
+      if (profile.qualification) {
+        html += `
+          <div style="background:var(--light);padding:12px;border-radius:10px;margin-bottom:12px;">
+            <label style="font-size:10px;color:var(--text-light);text-transform:uppercase;">Qualification</label>
+            <p style="font-size:14px;font-weight:500;margin-top:2px;">${profile.qualification}</p>
+          </div>
+        `;
+      }
+
+      if (profile.address) {
+        html += `
+          <div style="background:var(--light);padding:12px;border-radius:10px;margin-bottom:12px;">
+            <label style="font-size:10px;color:var(--text-light);text-transform:uppercase;">Address</label>
+            <p style="font-size:14px;font-weight:500;margin-top:2px;"><i class="fas fa-map-marker-alt" style="color:${c.badgeText};"></i> ${profile.address}</p>
+          </div>
+        `;
+      }
+
+      if (profile.joinDate) {
+        html += `
+          <div style="background:var(--light);padding:12px;border-radius:10px;margin-bottom:12px;">
+            <label style="font-size:10px;color:var(--text-light);text-transform:uppercase;">Joined Since</label>
+            <p style="font-size:14px;font-weight:500;margin-top:2px;"><i class="fas fa-calendar-check" style="color:${c.badgeText};"></i> ${profile.joinDate}</p>
+          </div>
+        `;
+      }
+
+      if (profile.mobile) {
+        html += `
+          <div style="display:flex;align-items:center;gap:10px;background:var(--light);padding:12px;border-radius:10px;margin-bottom:16px;">
+            <div style="flex:1;">
+              <label style="font-size:10px;color:var(--text-light);text-transform:uppercase;">Contact Number</label>
+              <p style="font-size:16px;font-weight:600;margin-top:2px;">${profile.mobile}</p>
+            </div>
+            <a href="tel:${profile.mobile}" style="background:${c.badgeText};color:white;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:18px;transition:all 0.3s;">
+              <i class="fas fa-phone"></i>
+            </a>
+          </div>
+        `;
+      }
+
+      document.getElementById('profile-modal-body').innerHTML = html;
+      openModal('profileViewModal');
+    }
+
+    // ============ RENDER VILLAGERS (CORRECTED) ============
+    function renderVillagers(searchTerm = '') {
+      const tbody = document.getElementById('villagers-body');
+      const table = document.getElementById('villagers-table-wrap');
+      const pagination = document.getElementById('villagers-pagination');
+      
+      let data = allVillagers;
+
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        data = data.filter(v =>
+          (v.Name && v.Name.toLowerCase().includes(term)) ||
+          (v.villagerId && v.villagerId.toLowerCase().includes(term)) ||
+          (v.FatherName && v.FatherName.toLowerCase().includes(term)) ||
+          (v.MobileNumber && v.MobileNumber.includes(term))
+        );
+      }
+
+      filteredVillagers = data;
+      const total = data.length;
+      const totalPages = Math.ceil(total / 20);
+      
+      if (villagerPage > totalPages) villagerPage = 1;
+      
+      const start = (villagerPage - 1) * 20;
+      const pageData = data.slice(start, start + 20);
+
+      if (total === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:30px;color:#999;">
+          <i class="fas fa-search" style="font-size:40px;display:block;margin-bottom:10px;"></i>
+          No villagers found
+        </td></tr>`;
+        table.style.display = 'block';
+        pagination.style.display = 'none';
+        return;
+      }
+
+      let html = '';
+      pageData.forEach((v, i) => {
+        const mobile = v.MobileNumber || '';
+        const masked = mobile.length >= 3 ? 'XXXXX' + mobile.slice(-3) : 'XXXXX';
+        const statusClass = v.Status === 'Active' ? 'status-active' : 'status-inactive';
+        const familyLink = v.familyLink || '';
+        
+        html += `
+          <tr>
+            <td>${start + i + 1}</td>
+            <td><strong>${v.villagerId || '-'}</strong></td>
+            <td>${v.Name || '-'}</td>
+            <td>${v.FatherName || '-'}</td>
+            <td><span class="mobile-masked">${masked}</span></td>
+            <td><span class="status-badge ${statusClass}">${v.Status || 'Active'}</span></td>
+            <td>
+              ${familyLink ? 
+                `<a href="${familyLink}" target="_blank" class="v-btn family" style="text-decoration:none; display:inline-block; padding:4px 12px;">View</a>` : 
+                '-'}
+            </td>
+          </tr>
+        `;
+      });
+      
+      tbody.innerHTML = html;
+      table.style.display = 'block';
+
+      if (totalPages > 1) {
+        let pagHtml = '';
+        pagHtml += `<button class="page-btn" onclick="goToVillagerPage(${villagerPage - 1})" ${villagerPage <= 1 ? 'disabled' : ''}>← Prev</button>`;
+        
+        for (let p = 1; p <= totalPages; p++) {
+          if (p === 1 || p === totalPages || (p >= villagerPage - 2 && p <= villagerPage + 2)) {
+            pagHtml += `<button class="page-btn ${p === villagerPage ? 'active' : ''}" onclick="goToVillagerPage(${p})">${p}</button>`;
+          } else if (p === villagerPage - 3 || p === villagerPage + 3) {
+            pagHtml += `<span class="page-info">...</span>`;
+          }
+        }
+        
+        pagHtml += `<span class="page-info">${start + 1}-${Math.min(start + 20, total)} of ${total}</span>`;
+        pagHtml += `<button class="page-btn" onclick="goToVillagerPage(${villagerPage + 1})" ${villagerPage >= totalPages ? 'disabled' : ''}>Next →</button>`;
+        
+        pagination.innerHTML = pagHtml;
+        pagination.style.display = 'flex';
+      } else {
+        pagination.style.display = 'none';
+      }
+    }
+
+    function goToVillagerPage(page) {
+      villagerPage = page;
+      const searchTerm = document.getElementById('public-search').value;
+      renderVillagers(searchTerm);
+      document.getElementById('villagers-table-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ============ SEARCH ============
+    function debounceSearch() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        villagerPage = 1;
+        searchVillagers();
+      }, 400);
+    }
+
+    function searchVillagers() {
+      const term = document.getElementById('public-search').value;
+      renderVillagers(term);
+    }
+
+    // ============ RENDER NOTICES ============
+    function renderNotices(filter = 'all') {
+      const grid = document.getElementById('notice-grid');
+      let notices = allNotices;
+
+      notices = notices.filter(n => !n.status || n.status === 'Active');
+
+      if (filter !== 'all') {
+        notices = notices.filter(n => n.category === filter);
+      }
+
+      if (!notices || notices.length === 0) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;">
+          <i class="fas fa-bell-slash"></i>
+          <p>No notices found${filter !== 'all' ? ' for ' + filter : ''}</p>
+        </div>`;
+        grid.style.display = 'block';
+        return;
+      }
+
+      const catColors = {
+        'Eidgah': '#1b5e20', 'Kabristan': '#37474f', 'Masjid': '#e67e22',
+        'Ramzan': '#c9a84c', 'General': '#2e7d32', 'Emergency': '#e74c3c'
+      };
+
+      let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">';
+      notices.forEach(n => {
+        const color = catColors[n.category] || '#1b5e20';
+        html += `
+          <div style="background:white;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);border-left:6px solid ${color};">
+            <div style="padding:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <span style="background:${color};color:white;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;">${n.category || 'Notice'}</span>
+                ${n.priority ? `<span style="background:#f1f8e9;color:${color};padding:4px 10px;border-radius:20px;font-size:11px;">${n.priority}</span>` : ''}
+              </div>
+              <h3 style="font-size:16px;font-weight:600;margin-bottom:8px;">${n.title || '-'}</h3>
+              <p style="font-size:13px;color:var(--text-light);line-height:1.6;margin-bottom:12px;">${n.description || '-'}</p>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#999;">
+                <span><i class="fas fa-calendar"></i> ${n.date || '-'}</span>
+                ${n.postedBy ? `<span><i class="fas fa-user"></i> ${n.postedBy}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      grid.innerHTML = html;
+      grid.style.display = 'block';
+    }
+
+    function filterNotices(category, btn) {
+      currentNoticeFilter = category;
+      
+      document.querySelectorAll('#notice-filters .filter-btn').forEach(b => {
+        b.style.background = 'white';
+        b.style.color = 'var(--primary)';
+      });
+      btn.style.background = 'var(--primary)';
+      btn.style.color = 'white';
+      
+      renderNotices(category);
+    }
+
+    // ============ RAMADAN CALENDAR ============
+    function showRamadanCalendar() {
+      const cal = document.getElementById('ramzanCalendar');
+      const grid = document.getElementById('ramzanGrid');
+      
+      if (!allRamadan || allRamadan.length === 0) {
+        grid.innerHTML = '<p style="color:var(--text-light);">Ramadan calendar not available yet.</p>';
+      } else {
+        let html = `
+          <div style="overflow-x:auto;">
+          <table class="ramadan-table">
+            <thead><tr><th>Day</th><th>Date</th><th>Sehri</th><th>Iftar</th><th>Remarks</th></tr></thead>
+            <tbody>
+        `;
+        allRamadan.forEach(d => {
+          html += `<tr><td>${d.day || '-'}</td><td>${d.date || '-'}</td><td>${d.sehriTime || '-'}</td><td>${d.iftarTime || '-'}</td><td>${d.remarks || ''}</td></tr>`;
+        });
+        html += '</tbody></table></div>';
+        grid.innerHTML = html;
+      }
+      
+      cal.style.display = 'block';
+      cal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function hideRamadanCalendar() {
+      document.getElementById('ramzanCalendar').style.display = 'none';
+    }
+
+    // ============ GALLERY FUNCTIONS ============
+    function loadGalleryPage() {
+      const container = document.getElementById('gallery-content');
+      container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading gallery...</div>';
+
+      let loaded = 0;
+      const totalToLoad = 3;
+
+      function checkAllLoaded() {
+        loaded++;
+        if (loaded >= totalToLoad) {
+          renderGallery('all');
+        }
+      }
+
+      fetch(`${SCRIPT_URL}?action=getInfo&type=masjid`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data && data.data.gallery) {
+            allGalleryImages.masjid = data.data.gallery.split(',').map(u => u.trim()).filter(u => u);
+          }
+          checkAllLoaded();
+        })
+        .catch(() => checkAllLoaded());
+
+      fetch(`${SCRIPT_URL}?action=getInfo&type=kabristan`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data && data.data.gallery) {
+            allGalleryImages.kabristan = data.data.gallery.split(',').map(u => u.trim()).filter(u => u);
+          }
+          checkAllLoaded();
+        })
+        .catch(() => checkAllLoaded());
+
+      fetch(`${SCRIPT_URL}?action=getInfo&type=eidgah`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.data && data.data.gallery) {
+            allGalleryImages.eidgah = data.data.gallery.split(',').map(u => u.trim()).filter(u => u);
+          }
+          checkAllLoaded();
+        })
+        .catch(() => checkAllLoaded());
+    }
+
+    function renderGallery(filter) {
+      const container = document.getElementById('gallery-content');
+      let images = [];
+
+      if (filter === 'all') {
+        allGalleryImages.masjid.forEach(u => images.push({ url: u, type: 'Masjid' }));
+        allGalleryImages.kabristan.forEach(u => images.push({ url: u, type: 'Kabristan' }));
+        allGalleryImages.eidgah.forEach(u => images.push({ url: u, type: 'Eidgah' }));
+      } else {
+        (allGalleryImages[filter] || []).forEach(u => images.push({ url: u, type: filter.charAt(0).toUpperCase() + filter.slice(1) }));
+      }
+
+      if (images.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>No photos available yet</p></div>';
+        return;
+      }
+
+      const allUrls = images.map(i => i.url);
+
+      let html = '<div class="gallery-grid">';
+      images.forEach((img, idx) => {
+        html += `
+          <div style="position:relative;">
+            <img src="${img.url}" alt="${img.type}" onclick="openImageViewer(${JSON.stringify(allUrls).replace(/"/g, '&quot;')}, ${idx})" loading="lazy">
+            <span style="position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,0.6);color:white;padding:2px 8px;border-radius:4px;font-size:10px;">${img.type}</span>
+          </div>
+        `;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function filterGallery(type, btn) {
+      document.querySelectorAll('.gallery-filter-btn').forEach(b => {
+        b.style.background = 'white';
+        b.style.color = 'var(--primary)';
+      });
+      btn.style.background = 'var(--primary)';
+      btn.style.color = 'white';
+      renderGallery(type);
+    }
+
+    // ============ IMAGE VIEWER ============
+    function openImageViewer(images, index) {
+      currentGalleryImages = images;
+      currentImageIndex = index;
+      document.getElementById('viewer-img').src = images[index];
+      document.getElementById('imageViewer').classList.add('show');
+    }
+
+    function closeImageViewer() {
+      document.getElementById('imageViewer').classList.remove('show');
+    }
+
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
+      document.getElementById('viewer-img').src = currentGalleryImages[currentImageIndex];
+    }
+
+    function prevImage() {
+      currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+      document.getElementById('viewer-img').src = currentGalleryImages[currentImageIndex];
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeImageViewer();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    });
+
+    // ============ PAGE NAVIGATION ============
+    function showPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('page-' + page).classList.add('active');
+      
+      const tabs = document.querySelectorAll('.nav-tab');
+      const pageNames = ['home','villagers','team','notices','masjid','gallery'];
+      const idx = pageNames.indexOf(page);
+      if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
+
+      if (page === 'villagers') {
+        villagerPage = 1;
+        renderVillagers();
+      }
+      if (page === 'team') {
+        renderProfiles();
+      }
+      if (page === 'notices') {
+        renderNotices(currentNoticeFilter);
+      }
+      if (page === 'masjid') loadMasjidInfo();
+      if (page === 'gallery') loadGalleryPage();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ============ MASJID PAGE ============
+    function loadMasjidInfo() {
+      const container = document.getElementById('masjid-content');
+      
+      fetch(`${SCRIPT_URL}?action=getInfo&type=masjid`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success || !data.data) {
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-mosque"></i><p>Masjid information will be updated soon</p></div>';
+            return;
+          }
+          const d = data.data;
+          const namazArr = d.namazTimes ? d.namazTimes.split(',') : [];
+          const namazNames = ['Fajr','Zuhr','Asr','Maghrib','Isha'];
+          const galleryArr = d.gallery ? d.gallery.split(',').filter(g => g.trim()) : [];
+          
+          let namazHtml = '';
+          namazArr.forEach((t, i) => {
+            namazHtml += `<div class="namaz-time-card"><div class="namaz-name">${namazNames[i] || 'Namaz'}</div><div class="namaz-time">${t.trim()}</div></div>`;
+          });
+
+          let galleryHtml = '';
+          const cleanGallery = galleryArr.map(u => u.trim());
+          cleanGallery.forEach((url, idx) => {
+            galleryHtml += `<img src="${url}" alt="Masjid" onclick="openImageViewer(${JSON.stringify(cleanGallery).replace(/"/g, '&quot;')}, ${idx})" loading="lazy">`;
+          });
+
+          container.innerHTML = `
+            <div class="detail-section">
+              <h3><i class="fas fa-mosque"></i> ${d.title || 'Masjid Information'}</h3>
+              <p>${d.description || 'No description available'}</p>
+            </div>
+
+            ${namazArr.length > 0 ? `
+            <div class="detail-section">
+              <h3><i class="fas fa-clock"></i> Namaz Timings</h3>
+              <div class="namaz-times-grid">${namazHtml}</div>
+            </div>` : ''}
+
+            <div class="detail-section">
+              <div class="detail-info-grid">
+                ${d.jumaTime ? `<div class="detail-info-item"><label>Juma Namaz</label><span>${d.jumaTime}</span></div>` : ''}
+                ${d.khutbaTime ? `<div class="detail-info-item"><label>Khutba Time</label><span>${d.khutbaTime}</span></div>` : ''}
+                ${d.startDate ? `<div class="detail-info-item"><label>Work Started</label><span>${d.startDate}</span></div>` : ''}
+              </div>
+            </div>
+
+            ${cleanGallery.length > 0 ? `
+            <div class="detail-section gallery-section">
+              <h3><i class="fas fa-images"></i> Gallery (${cleanGallery.length} photos)</h3>
+              <div class="gallery-grid">${galleryHtml}</div>
+            </div>` : ''}
+
+            ${d.mapLink ? `
+            <div class="detail-section">
+              <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+              <div class="map-container">
+                <iframe src="${d.mapLink}" allowfullscreen loading="lazy"></iframe>
+              </div>
+              <a href="${d.mapLink}" target="_blank" class="map-link"><i class="fas fa-directions"></i> Open in Google Maps</a>
+            </div>` : ''}
+
+            <div class="like-section">
+              <button class="like-btn" onclick="likeInfo('masjid', this)"><i class="fas fa-heart"></i> Like</button>
+              <span class="like-count" id="masjid-likes">${d.likes || 0} likes</span>
+            </div>
+          `;
+        })
+        .catch(err => {
+          container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading masjid information</p></div>';
+        });
+    }
+
+    function likeInfo(type, btn) {
+      btn.classList.add('liked');
+      btn.disabled = true;
+      
+      fetch(`${SCRIPT_URL}?action=addLike&type=${type}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById(type + '-likes').textContent = data.likes + ' likes';
+          }
+        })
+        .catch(err => console.error('Error adding like:', err));
+    }
+
+    // ============ MODAL HELPERS ============
+    function openModal(id) { document.getElementById(id).classList.add('show'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+    function openLoginModal() {
+      document.getElementById('login-step-1').style.display = 'block';
+      document.getElementById('login-step-2').style.display = 'none';
+      openModal('loginModal');
+    }
+
+    // ============ TOAST ============
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ============ LOGIN ============
+    function setLoginType(type, btn) {
+      loginType = type;
+      document.querySelectorAll('.login-type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function requestOTP() {
+      const email = document.getElementById('login-email').value.trim();
+      if (!email) { showToast('Please enter email'); return; }
+      loginEmail = email;
+      showToast('Sending OTP...');
+
+      fetch(`${SCRIPT_URL}?action=sendOTP&email=${encodeURIComponent(email)}&type=${loginType}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById('login-step-1').style.display = 'none';
+            document.getElementById('login-step-2').style.display = 'block';
+            showToast('OTP sent to your email');
+          } else {
+            showToast(data.message || 'Failed to send OTP');
+          }
+        })
+        .catch(err => showToast('Error: ' + err.message));
+    }
+
+    function verifyLoginOTP() {
+      const otp = document.getElementById('login-otp').value.trim();
+      if (!otp || otp.length !== 6) { showToast('Enter valid 6-digit OTP'); return; }
+
+      fetch(`${SCRIPT_URL}?action=verifyOTP&email=${encodeURIComponent(loginEmail)}&otp=${otp}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            showToast('Login successful! Redirecting...');
+            closeModal('loginModal');
+            const role = data.user.role;
+            const baseUrl = window.location.href.split('?')[0];
+            if (role === 'admin') {
+              window.open(baseUrl + '?page=admin&uid=' + data.user.id + '&name=' + encodeURIComponent(data.user.name), '_self');
+            } else {
+              window.open(baseUrl + '?page=staff&uid=' + data.user.id + '&name=' + encodeURIComponent(data.user.name), '_self');
+            }
+          } else {
+            showToast(data.message);
+          }
+        })
+        .catch(err => showToast('Error: ' + err.message));
+    }
+
+    // ============ REFRESH ============
+    function refreshAllData() {
+      fetchAllData();
+    }
+
+    // ============ LOADING/ERROR STATES ============
+    function showLoaders(show) {
+      const villagersLoading = document.getElementById('villagers-loading');
+      const teamLoading = document.getElementById('team-loading');
+      const noticesLoading = document.getElementById('notices-loading');
+      
+      if (villagersLoading) villagersLoading.style.display = show ? 'flex' : 'none';
+      if (teamLoading) teamLoading.style.display = show ? 'flex' : 'none';
+      if (noticesLoading) noticesLoading.style.display = show ? 'flex' : 'none';
+      
+      if (show) {
+        document.getElementById('villagers-table-wrap').style.display = 'none';
+        document.getElementById('villagers-pagination').style.display = 'none';
+        document.getElementById('team-grid').style.display = 'none';
+        document.getElementById('notice-grid').style.display = 'none';
+      }
+    }
+
+    function showErrors(message) {
+      document.getElementById('villagers-error').style.display = 'block';
+      document.getElementById('villagers-error-msg').textContent = message;
+      document.getElementById('team-error').style.display = 'block';
+      document.getElementById('team-error-msg').textContent = message;
+      document.getElementById('notices-error').style.display = 'block';
+      document.getElementById('notices-error-msg').textContent = message;
+      
+      showLoaders(false);
+    }
+
+    // Make functions globally accessible
+    window.showPage = showPage;
+    window.searchVillagers = searchVillagers;
+    window.debounceSearch = debounceSearch;
+    window.filterNotices = filterNotices;
+    window.showRamadanCalendar = showRamadanCalendar;
+    window.hideRamadanCalendar = hideRamadanCalendar;
+    window.refreshAllData = refreshAllData;
+    window.goToVillagerPage = goToVillagerPage;
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.openLoginModal = openLoginModal;
+    window.setLoginType = setLoginType;
+    window.requestOTP = requestOTP;
+    window.verifyLoginOTP = verifyLoginOTP;
+    window.openProfileView = openProfileView;
+    window.openImageViewer = openImageViewer;
+    window.closeImageViewer = closeImageViewer;
+    window.nextImage = nextImage;
+    window.prevImage = prevImage;
+    window.filterGallery = filterGallery;
+    window.likeInfo = likeInfo;
+  </script>
+</body>
+</html>
