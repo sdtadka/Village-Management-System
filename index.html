@@ -1663,7 +1663,7 @@
       <h2 class="section-heading">
         <i class="fas fa-bell"></i> Notices &amp; Updates
       </h2>
-      <p style="margin-bottom: 15px; color: var(--text-light);">Eidgah, Kabristan, Masjid, Ramzan &amp; More</p>
+      <p style="margin-bottom: 15px; color: var(--text-light);">Eidgah, Kabristan, Masjid, Ramzan, Madrasa &amp; More</p>
 
       <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;" id="notice-filters">
         <button class="filter-btn active" onclick="filterNotices('all', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: var(--primary); color: white; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">All</button>
@@ -1671,6 +1671,7 @@
         <button class="filter-btn" onclick="filterNotices('Kabristan', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">Kabristan</button>
         <button class="filter-btn" onclick="filterNotices('Masjid', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">Masjid</button>
         <button class="filter-btn" onclick="filterNotices('Ramzan', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">Ramzan</button>
+        <button class="filter-btn" onclick="filterNotices('Madrasa', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">Madrasa</button>
         <button class="filter-btn" onclick="filterNotices('General', this)" style="padding: 8px 16px; border-radius: 20px; border: 2px solid var(--primary); background: white; color: var(--primary); cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500;">General</button>
       </div>
 
@@ -1689,10 +1690,48 @@
     </div>
 
     <!-- ==================== MASJID PAGE ==================== -->
+    <!-- ==================== MASJID PAGE (4 TABS) ==================== -->
     <div id="page-masjid" class="page">
-      <div id="masjid-content">
-        <div class="loading"><div class="spinner"></div>Loading masjid information...</div>
+
+      <h2 class="section-heading">
+        <i class="fas fa-mosque"></i> Islamic Places — Village Simra
+      </h2>
+      <p style="margin-bottom:16px;color:var(--text-light);font-size:13px;">Select a place to view details, timings, photos and location</p>
+
+      <!-- 4 PLACE SELECTOR CARDS -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:20px;" id="place-tabs">
+
+        <div class="place-tab-card active" id="tab-masjid" onclick="switchPlaceTab('masjid')" style="background:white;border-radius:14px;padding:18px 10px;text-align:center;cursor:pointer;box-shadow:var(--shadow);border:2px solid var(--primary);transition:all 0.3s;">
+          <div style="font-size:28px;margin-bottom:6px;color:#1b5e20;"><i class="fas fa-mosque"></i></div>
+          <div style="font-size:13px;font-weight:600;color:var(--primary);">Masjid</div>
+          <div style="font-size:10px;color:var(--text-light);margin-top:2px;">Mosque</div>
+        </div>
+
+        <div class="place-tab-card" id="tab-eidgah" onclick="switchPlaceTab('eidgah')" style="background:white;border-radius:14px;padding:18px 10px;text-align:center;cursor:pointer;box-shadow:var(--shadow);border:2px solid transparent;transition:all 0.3s;">
+          <div style="font-size:28px;margin-bottom:6px;color:#1565c0;"><i class="fas fa-star-and-crescent"></i></div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Eidgah</div>
+          <div style="font-size:10px;color:var(--text-light);margin-top:2px;">Eid Ground</div>
+        </div>
+
+        <div class="place-tab-card" id="tab-kabristan" onclick="switchPlaceTab('kabristan')" style="background:white;border-radius:14px;padding:18px 10px;text-align:center;cursor:pointer;box-shadow:var(--shadow);border:2px solid transparent;transition:all 0.3s;">
+          <div style="font-size:28px;margin-bottom:6px;color:#37474f;"><i class="fas fa-leaf"></i></div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Kabristan</div>
+          <div style="font-size:10px;color:var(--text-light);margin-top:2px;">Cemetery</div>
+        </div>
+
+        <div class="place-tab-card" id="tab-madrasa" onclick="switchPlaceTab('madrasa')" style="background:white;border-radius:14px;padding:18px 10px;text-align:center;cursor:pointer;box-shadow:var(--shadow);border:2px solid transparent;transition:all 0.3s;">
+          <div style="font-size:28px;margin-bottom:6px;color:#6a1b9a;"><i class="fas fa-book-open"></i></div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Madrasa</div>
+          <div style="font-size:10px;color:var(--text-light);margin-top:2px;">Islamic School</div>
+        </div>
+
       </div>
+
+      <!-- PLACE CONTENT AREA -->
+      <div id="masjid-content">
+        <div class="loading"><div class="spinner"></div>Loading information...</div>
+      </div>
+
     </div>
 
     <!-- ==================== GALLERY PAGE ==================== -->
@@ -1704,6 +1743,8 @@
         <button class="gallery-filter-btn" onclick="filterGallery('masjid',this)" style="padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:white;color:var(--primary);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all 0.3s;">Masjid</button>
         <button class="gallery-filter-btn" onclick="filterGallery('kabristan',this)" style="padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:white;color:var(--primary);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all 0.3s;">Kabristan</button>
         <button class="gallery-filter-btn" onclick="filterGallery('eidgah',this)" style="padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:white;color:var(--primary);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all 0.3s;">Eidgah</button>
+        <button class="gallery-filter-btn" onclick="filterGallery('madrasa',this)" style="padding:8px 16px;border-radius:20px;border:2px solid var(--primary);background:white;color:var(--primary);cursor:pointer;font-family:inherit;font-size:12px;font-weight:500;transition:all 0.3s;">Madrasa</button>
+
       </div>
 
       <div id="gallery-content">
@@ -2945,110 +2986,193 @@
     // ============================================================
     //  MASJID PAGE
     // ============================================================
+    // ============================================================
+    //  ISLAMIC PLACES — 4 TAB SYSTEM (Masjid/Eidgah/Kabristan/Madrasa)
+    // ============================================================
+    let activePlaceTab = 'masjid';
+    const placeCache   = {};  // cache fetched data to avoid re-fetching
+
     function loadMasjidInfo() {
+      // Called when page loads — load default tab
+      switchPlaceTab('masjid');
+    }
+
+    function switchPlaceTab(type) {
+      activePlaceTab = type;
+
+      // Update tab card styles
+      document.querySelectorAll('.place-tab-card').forEach(c => {
+        c.style.borderColor = 'transparent';
+        c.style.background  = 'white';
+        c.querySelectorAll('div').forEach(d => {
+          if (d.style.fontSize === '13px') d.style.color = 'var(--text)';
+        });
+      });
+      const activeCard = document.getElementById('tab-' + type);
+      if (activeCard) {
+        activeCard.style.borderColor = 'var(--primary)';
+        activeCard.style.background  = '#f1f8e9';
+        const titleDiv = activeCard.querySelectorAll('div')[1];
+        if (titleDiv) titleDiv.style.color = 'var(--primary)';
+      }
+
+      // Use cache if available
+      if (placeCache[type]) {
+        renderPlaceInfo(type, placeCache[type]);
+        return;
+      }
+
+      // Show loader
       const container = document.getElementById('masjid-content');
-      container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading masjid information...</div>';
+      container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading ' + type + ' information...</div>';
 
-      // Try lowercase first, then uppercase
-      const tryFetch = (type) => fetch(SCRIPT_URL + '?action=getInfo&type=' + type).then(r => r.json());
+      // Fetch — try lowercase then capitalised
+      const tryFetch = (t) => fetch(SCRIPT_URL + '?action=getInfo&type=' + t).then(r => r.json());
 
-      tryFetch('masjid')
+      tryFetch(type)
         .then(async data => {
           if (!data.success || !data.data) {
-            // Try uppercase fallback
-            data = await tryFetch('Masjid');
+            const cap = type.charAt(0).toUpperCase() + type.slice(1);
+            data = await tryFetch(cap);
           }
           if (!data.success || !data.data) {
-            container.innerHTML = '<div class="empty-state"><i class="fas fa-mosque"></i><p>Masjid information will be updated soon</p></div>';
+            container.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-info-circle"></i>
+                <p>${type.charAt(0).toUpperCase() + type.slice(1)} information will be updated soon</p>
+              </div>`;
             return;
           }
-
-          const d         = data.data;
-          const namazArr  = d.namazTimes ? d.namazTimes.split(',').map(t => t.trim()) : [];
-          const namazNames = ['Fajr', 'Zuhr', 'Asr', 'Maghrib', 'Isha'];
-          const galleryArr = d.gallery ? d.gallery.split(',').map(u => u.trim()).filter(Boolean) : [];
-
-          let namazHtml = '';
-          namazArr.forEach((t, i) => {
-            namazHtml += `
-              <div class="namaz-time-card">
-                <div class="namaz-name">${namazNames[i] || 'Namaz'}</div>
-                <div class="namaz-time">${formatTime(t)}</div>
-              </div>`;
-          });
-
-          const cleanGallery = galleryArr.map(u => fixImgUrl(u));
-          let galleryHtml = '';
-          cleanGallery.forEach((url, idx) => {
-            galleryHtml += `<img src="${url}" alt="Masjid" onclick="openImageViewer(${JSON.stringify(cleanGallery).replace(/"/g,'&quot;')}, ${idx})" loading="lazy" onerror="this.style.display='none';">`;
-          });
-
-          // Read existing likes count
-          const savedLikes = parseInt(localStorage.getItem('gv_like_count_masjid') || '0', 10);
-          const totalLikes = Math.max(d.likes || 0, savedLikes);
-
-          // Read views
-          const totalViews = parseInt(localStorage.getItem('gv_views_masjid') || '1', 10);
-
-          container.innerHTML = `
-            <div class="detail-section">
-              <h3><i class="fas fa-mosque"></i> ${d.title || 'Masjid Information'}</h3>
-              <p>${d.description || 'No description available'}</p>
-            </div>
-
-            ${namazArr.length > 0 ? `
-            <div class="detail-section">
-              <h3><i class="fas fa-clock"></i> Namaz Timings</h3>
-              <div class="namaz-times-grid">${namazHtml}</div>
-            </div>` : ''}
-
-            <div class="detail-section">
-              <div class="detail-info-grid">
-                ${d.jumaTime   ? `<div class="detail-info-item"><label>Juma Namaz</label><span>${formatTime(d.jumaTime)}</span></div>`   : ''}
-                ${d.khutbaTime ? `<div class="detail-info-item"><label>Khutba Time</label><span>${formatTime(d.khutbaTime)}</span></div>` : ''}
-                ${d.startDate  ? `<div class="detail-info-item"><label>Work Started</label><span>${formatDate(d.startDate)}</span></div>` : ''}
-              </div>
-            </div>
-
-            ${cleanGallery.length > 0 ? `
-            <div class="detail-section gallery-section">
-              <h3><i class="fas fa-images"></i> Gallery (${cleanGallery.length} photos)</h3>
-              <div class="gallery-grid">${galleryHtml}</div>
-            </div>` : ''}
-
-            <!-- LIKE & VIEWS — CENTERED BELOW PHOTOS -->
-            <div class="like-section">
-              <div class="like-views-row">
-                <button class="like-btn" id="like-btn-masjid" onclick="likeInfo('masjid', this)">
-                  ❤️ Like Karo
-                </button>
-                <div class="views-btn" id="views-btn-masjid">
-                  <i class="fas fa-eye"></i> <span id="masjid-views">${totalViews}</span> Views
-                </div>
-              </div>
-              <span class="like-count" id="masjid-likes">${totalLikes} ❤️ Likes</span>
-              <span class="like-cooldown-msg" id="masjid-cooldown"></span>
-            </div>
-
-            ${d.mapLink ? `
-            <div class="detail-section">
-              <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
-              <div class="map-container">
-                <iframe src="${d.mapLink}" allowfullscreen loading="lazy"></iframe>
-              </div>
-              <a href="${d.mapLink}" target="_blank" class="map-link"><i class="fas fa-directions"></i> Open in Google Maps</a>
-            </div>` : ''}
-          `;
-
-          // Initialise like button state after rendering
-          initLikeButton('masjid');
-          // Increment view counter
-          incrementViewCount('masjid');
-
+          placeCache[type] = data.data;
+          renderPlaceInfo(type, data.data);
         })
         .catch(() => {
-          container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading masjid information</p></div>';
+          container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading information. Please try again.</p></div>';
         });
+    }
+
+    function renderPlaceInfo(type, d) {
+      const container = document.getElementById('masjid-content');
+
+      // Config per type
+      const config = {
+        masjid:    { icon: 'fas fa-mosque',        label: 'Masjid',    color: '#1b5e20', showNamaz: true,  showMadrasa: false },
+        eidgah:    { icon: 'fas fa-star-and-crescent', label: 'Eidgah', color: '#1565c0', showNamaz: false, showMadrasa: false },
+        kabristan: { icon: 'fas fa-tree',           label: 'Kabristan', color: '#37474f', showNamaz: false, showMadrasa: false },
+        madrasa:   { icon: 'fas fa-book-open',      label: 'Madrasa',   color: '#6a1b9a', showNamaz: false, showMadrasa: true  }
+      };
+      const cfg = config[type] || config.masjid;
+
+      // Gallery
+      const galleryArr  = d.gallery ? d.gallery.split(',').map(u => u.trim()).filter(Boolean) : [];
+      const cleanGallery = galleryArr.map(u => fixImgUrl(u));
+      let galleryHtml = '';
+      cleanGallery.forEach((url, idx) => {
+        galleryHtml += `<img src="${url}" alt="${cfg.label}" onclick="openImageViewer(${JSON.stringify(cleanGallery).replace(/"/g,'&quot;')}, ${idx})" loading="lazy" onerror="this.style.display='none';">`;
+      });
+
+      // Namaz timings (only for Masjid)
+      let namazHtml = '';
+      if (cfg.showNamaz && d.namazTimes) {
+        const namazArr   = d.namazTimes.split(',').map(t => t.trim());
+        const namazNames = ['Fajr', 'Zuhr', 'Asr', 'Maghrib', 'Isha'];
+        namazArr.forEach((t, i) => {
+          namazHtml += `
+            <div class="namaz-time-card">
+              <div class="namaz-name">${namazNames[i] || 'Namaz'}</div>
+              <div class="namaz-time">${formatTime(t)}</div>
+            </div>`;
+        });
+      }
+
+      // Extra info grid items
+      let extraItems = '';
+      if (d.jumaTime)    extraItems += `<div class="detail-info-item"><label>Juma Namaz</label><span>${formatTime(d.jumaTime)}</span></div>`;
+      if (d.khutbaTime)  extraItems += `<div class="detail-info-item"><label>Khutba Time</label><span>${formatTime(d.khutbaTime)}</span></div>`;
+      if (d.startDate)   extraItems += `<div class="detail-info-item"><label>Established</label><span>${formatDate(d.startDate)}</span></div>`;
+      if (d.capacity)    extraItems += `<div class="detail-info-item"><label>Capacity</label><span>${d.capacity}</span></div>`;
+      if (d.totalGraves) extraItems += `<div class="detail-info-item"><label>Total Graves</label><span>${d.totalGraves}</span></div>`;
+      if (d.students)    extraItems += `<div class="detail-info-item"><label>Students</label><span>${d.students}</span></div>`;
+      if (d.teachers)    extraItems += `<div class="detail-info-item"><label>Teachers</label><span>${d.teachers}</span></div>`;
+      if (d.classes)     extraItems += `<div class="detail-info-item"><label>Classes</label><span>${d.classes}</span></div>`;
+      if (d.timings)     extraItems += `<div class="detail-info-item"><label>Timings</label><span>${formatTime(d.timings)}</span></div>`;
+      if (d.phone)       extraItems += `<div class="detail-info-item"><label>Contact</label><span>${d.phone}</span></div>`;
+
+      // Like & views
+      const savedLikes = parseInt(localStorage.getItem('gv_like_count_' + type) || '0', 10);
+      const totalLikes = Math.max(d.likes || 0, savedLikes);
+      const totalViews = parseInt(localStorage.getItem('gv_views_' + type) || '1', 10);
+
+      // Madrasa website button
+      const madrasaBtn = cfg.showMadrasa ? `
+        <div class="detail-section" style="margin-top:8px;">
+          <h3><i class="fas fa-globe"></i> Madrasa Website</h3>
+          <a href="#" id="madrasa-website-link" onclick="return false;"
+            style="display:inline-flex;align-items:center;gap:8px;background:#1a1a1a;color:white;padding:12px 24px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600;opacity:0.5;cursor:not-allowed;margin-top:6px;">
+            <i class="fas fa-external-link-alt"></i> Visit Madrasa Website
+            <span style="font-size:10px;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:10px;margin-left:4px;">Coming Soon</span>
+          </a>
+          <p style="font-size:11px;color:#aaa;margin-top:6px;"><i class="fas fa-info-circle"></i> Website link will be added soon</p>
+        </div>
+      ` : '';
+
+      container.innerHTML = `
+        <!-- Title & Description -->
+        <div class="detail-section">
+          <h3 style="color:${cfg.color};border-bottom-color:${cfg.color}20;">
+            <i class="${cfg.icon}"></i> ${d.title || cfg.label + ' — Village Simra'}
+          </h3>
+          <p>${d.description || 'Information will be updated soon.'}</p>
+        </div>
+
+        ${namazHtml ? `
+        <div class="detail-section">
+          <h3><i class="fas fa-clock"></i> Namaz Timings</h3>
+          <div class="namaz-times-grid">${namazHtml}</div>
+        </div>` : ''}
+
+        ${extraItems ? `
+        <div class="detail-section">
+          <div class="detail-info-grid">${extraItems}</div>
+        </div>` : ''}
+
+        ${cleanGallery.length > 0 ? `
+        <div class="detail-section gallery-section">
+          <h3><i class="fas fa-images"></i> Photos (${cleanGallery.length})</h3>
+          <div class="gallery-grid">${galleryHtml}</div>
+        </div>` : ''}
+
+        ${madrasaBtn}
+
+        <!-- LIKE & VIEWS -->
+        <div class="like-section">
+          <div class="like-views-row">
+            <button class="like-btn" id="like-btn-${type}" onclick="likeInfo('${type}', this)">
+              ❤️ Like Karo
+            </button>
+            <div class="views-btn">
+              <i class="fas fa-eye"></i> <span id="${type}-views">${totalViews}</span> Views
+            </div>
+          </div>
+          <span class="like-count" id="${type}-likes">${totalLikes} ❤️ Likes</span>
+          <span class="like-cooldown-msg" id="${type}-cooldown"></span>
+        </div>
+
+        ${d.mapLink ? `
+        <div class="detail-section" style="margin-top:16px;">
+          <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+          <div class="map-container">
+            <iframe src="${d.mapLink}" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <a href="${d.mapLink}" target="_blank" class="map-link">
+            <i class="fas fa-directions"></i> Open in Google Maps
+          </a>
+        </div>` : ''}
+      `;
+
+      // Init like button & views
+      initLikeButton(type);
+      incrementViewCount(type);
     }
 
     // ============================================================
@@ -3283,6 +3407,8 @@
     //  REFRESH
     // ============================================================
     function refreshAllData() {
+      // Clear place cache so fresh data loads
+      Object.keys(placeCache).forEach(k => delete placeCache[k]);
       fetchAllData();
     }
 
@@ -3325,6 +3451,7 @@
     //  GLOBAL EXPORTS
     // ============================================================
     window.showPage              = showPage;
+    window.switchPlaceTab        = switchPlaceTab;
     window.searchVillagers       = searchVillagers;
     window.debounceSearch        = debounceSearch;
     window.filterNotices         = filterNotices;
